@@ -2,60 +2,48 @@
 <html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>کپی کد سایت</title>
 </head>
 <body>
     <h1>کپی کد اصلی سایت</h1>
-    <p>برای دیدن و کپی‌کردن کد HTML صفحه اصلی، دکمه زیر را بزنید.</p>
+    <p>برای نمایش کد صفحه اصلی، روی دکمه نمایش کد بزنید.</p>
+
     <button onclick="showCode()">نمایش کد</button>
     <button onclick="copyCode()">کپی کد</button>
-    <p id="message"></p>
-    <textarea id="code" rows="28" cols="90" style="width:95%;" readonly></textarea>
-    <p><a href="index.html">بازگشت به صفحه اصلی</a></p>
+
+    <p id="status"></p>
+    <textarea id="code" rows="30" cols="90" style="width:95%;" readonly></textarea>
+
+    <p><a href="index.html">بازگشت به صفحه اول</a></p>
 
     <script>
         function showCode() {
-            fetch("index.html")
+            fetch("org.html")
                 .then(function(response) {
-                    if (!response.ok) {
-                        throw new Error("فایل پیدا نشد");
-                    }
                     return response.text();
                 })
                 .then(function(text) {
                     document.getElementById("code").value = text;
-                    document.getElementById("message").innerHTML = "کد index.html بارگذاری شد.";
+                    document.getElementById("status").innerHTML = "کد org.html نمایش داده شد.";
                 })
                 .catch(function() {
-                    document.getElementById("message").innerHTML =
-                        "بارگذاری خودکار در این روش ممکن نشد. فایل index.html را مستقیم در ویرایشگر باز کنید.";
+                    document.getElementById("status").innerHTML =
+                        "کد بارگذاری نشد. فایل org.html را در ویرایشگر باز کنید.";
                 });
         }
 
         function copyCode() {
-            var area = document.getElementById("code");
-            if (area.value === "") {
+            var box = document.getElementById("code");
+            if (box.value === "") {
                 showCode();
-                document.getElementById("message").innerHTML =
-                    "ابتدا روی «نمایش کد» بزنید، سپس دوباره «کپی کد» را انتخاب کنید.";
+                document.getElementById("status").innerHTML = "ابتدا نمایش کد را بزنید؛ سپس دوباره کپی کد را بزنید.";
                 return;
             }
-            area.select();
-            area.setSelectionRange(0, area.value.length);
-            if (navigator.clipboard && window.isSecureContext) {
-                navigator.clipboard.writeText(area.value)
-                    .then(function() {
-                        document.getElementById("message").innerHTML = "کد کپی شد.";
-                    })
-                    .catch(function() {
-                        document.execCommand("copy");
-                        document.getElementById("message").innerHTML = "در صورت اجازه مرورگر، کد کپی شد.";
-                    });
-            } else {
-                document.execCommand("copy");
-                document.getElementById("message").innerHTML = "در صورت اجازه مرورگر، کد کپی شد.";
-            }
+
+            box.select();
+            box.setSelectionRange(0, box.value.length);
+            document.execCommand("copy");
+            document.getElementById("status").innerHTML = "کد انتخاب شد؛ اگر مرورگر اجازه دهد کپی شده است.";
         }
     </script>
 </body>
